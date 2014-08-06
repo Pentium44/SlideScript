@@ -1,7 +1,7 @@
 # SlideScript makefile
 # (C) Copyright 2014 Chris Dorman, some rights reserved (CC-BY-SA 3.0)
 CC=gcc
-FLAGS=
+FLAGS=-O2 -Wall -Wextra
 EXEC=slidescript
 
 
