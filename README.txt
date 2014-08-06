@@ -33,4 +33,4 @@ at this moment!
 *Read and write from file
 *Some simple functions
 
-(C) Copyright 2014 Chris Dorman, some rights reserved (GPLv3)
+(C) Copyright 2014 Chris Dorman, some rights reserved (CC-BY-SA 3.0)
