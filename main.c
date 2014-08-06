@@ -145,20 +145,19 @@ int main(int argc, char **argv)
 				// strtok to filename of function
 				tok_srch = strtok(NULL, char_quote);
 				
-				// Check if file exists and can be opened
-				if(access(tok_srch, F_OK) == -1) 
+				FILE *read_file = fopen(tok_srch, "r");
+				
+				if(read_file == NULL) 
 				{
 					printf("Error: failed to open %s.\n", tok_srch);
 					continue;
 				}
 				
-				FILE *read_file = fopen(tok_srch, "r");
-				
 				char read_line[1024];
 				
 				while(fgets(read_line, sizeof(read_line), read_file) != NULL) 
 				{
-					printf("%s\n", read_line);
+					printf("%s", read_line);
 				}
 				
 				fclose(read_file);
