@@ -154,13 +154,6 @@ int main(int argc, char **argv)
 				
 				FILE *read_file = fopen(tok_srch, "r");
 				
-				// Check if file opened
-				if(read_file == NULL) 
-				{
-					printf("Error: failed to read %s.\n", tok_srch);
-					continue;
-				}
-				
 				char read_line[1024];
 				
 				while(fgets(read_line, sizeof(read_line), read_file) != NULL) 
