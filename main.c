@@ -9,12 +9,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-
+#include "util.h"
 
 #define CHUNKSIZE 2048
-
-// Version
-char *ss_version = "1.0";
 
 // StrTok characters
 char *char_equal = "=";
@@ -31,34 +28,16 @@ char *char_bracket_close = "]";
 
 int main(int argc, char **argv) 
 {
+
+	parse_args(argc, argv);
+
 	/*
 		Variables
 	*/
 
 	char script_line[512];
 	char *tok_srch;
-	
-	// Check to see if help was called or if a file path was provided.
-	if(argc == 1) 
-	{
-		printf("Error: no file supplied. use %s -h for help\n", argv[0]);
-		exit(1);
-	} 
-	else if(argc == 2 && strncmp("-h", argv[1], 2) == 0) 
-	{
-		printf("SlideScript - Simple, everyday use, programming script\n"
-		"Arguments:\n\n"
-		"-v\t Display version number\n"
-		"-h\t Display this help page\n"
-		"Usage: %s <filename>\n", argv[0]);
-		exit(0);
-	} 
-	else if(argc == 2 && strncmp("-v", argv[1], 2) == 0) 
-	{
-		printf("SlideScript v%s\n", ss_version);
-		exit(0);
-	}
-	
+
 	/*
 		Main system
 	*/
@@ -68,7 +47,7 @@ int main(int argc, char **argv)
 	// check if config opens successfully
 	if(access(argv[1], F_OK) == -1) {
 		printf("Error: failed to open %s.\n", argv[1]);
-		exit(1);
+		exit(EXIT_FAILURE);
 	}
 		
 	// Run while loop if file is empty.
@@ -168,5 +147,6 @@ int main(int argc, char **argv)
 		
 	fclose(script);
 	
-	exit(0);
+	exit(EXIT_SUCCESS);
 }
+

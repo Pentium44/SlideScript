@@ -1,15 +1,17 @@
 # SlideScript makefile
 # (C) Copyright 2014 Chris Dorman, some rights reserved (CC-BY-SA 3.0)
 
+VERSION = \"0.0.1\"
+
 PREFIX ?= /usr/local
 
 CC           ?= cc
 CFLAGS       += -O2 -std=c99 -pedantic -g -Wall -Wextra --param=ssp-buffer-size=2 -fstack-protector-all
-CPPFLAGS     += -D_FORTIFY_SOURCE=2
+CPPFLAGS     += -DVERSION=$(VERSION) -D_FORTIFY_SOURCE=2
 LDFLAGS      += -Wl,-O1,--sort-common,--hash-style=gnu,-z,relro
 BIN          ?= slidescript
 
-OBJECTS = main.o
+OBJECTS = main.o util.o
 
 all: main
 
