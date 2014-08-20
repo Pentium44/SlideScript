@@ -1,5 +1,4 @@
 # This is a comment
-// another way to comment
 
 print "Writing to file.txt in 1 second"
 sleep 1

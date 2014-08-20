@@ -13,71 +13,58 @@
 
 #define CHUNKSIZE 2048
 
-// StrTok characters
-char *char_equal = "=";
-char *char_quote = "\"";
-char *char_space = " ";
-char *char_bracket_open = "[";
-char *char_bracket_close = "]";
-
-// Mem struct. All buffers are written here.
-//struct mem
-//{
-//	char bufchunk[CHUNKSIZE];
-//};
+/* Mem struct. All buffers are written here. */
+/*
+struct mem
+{
+	char bufchunk[CHUNKSIZE];
+};
+*/
 
 int main(int argc, char **argv) 
 {
+	FILE* script;
+	char script_line[512];
+	char* tok_srch;
 
 	parse_args(argc, argv);
 
-	/*
-		Variables
-	*/
-
-	char script_line[512];
-	char *tok_srch;
-
-	/*
-		Main system
-	*/
+	script = fopen(argv[1], "r");
 	
-	FILE *script = fopen(argv[1], "r");
-	
-	// check if config opens successfully
-	if(access(argv[1], F_OK) == -1) {
+	/* check if config opens successfully */
+	if(script == NULL) {
 		printf("Error: failed to open %s.\n", argv[1]);
 		exit(EXIT_FAILURE);
 	}
 		
-	// Run while loop if file is empty.
+	/* Run while loop if file is empty. */
 	if(script != NULL) 
 	{
 			
-		// parse each line from the script in order.
+		/* parse each line from the script in order. */
 		while(fgets(script_line, sizeof(script_line), script) != NULL) 
 		{
 			tok_srch = strtok(script_line, "=\" ");
 			
-			// if line starts with a comment, skip
-			if(strncmp("#",tok_srch,1) == 0 || strncmp("//",tok_srch,2) == 0)
+			/* if line starts with a comment, skip */
+			if(strncmp("#",tok_srch,1) == 0)
 			{
 				continue;
-			} // comment skip
+			} /* comment skip */
 			
-			// print function
+			/* print function */
 			if(strncmp("print",tok_srch,5) == 0)
 			{
-				tok_srch = strtok(NULL, char_quote);
+				tok_srch = strtok(NULL, "\"");
 				printf("%s\n", tok_srch);
-			} // print function
+			} /* print function */
 			
-			// sleep function
+			/* sleep function */
 			if(strncmp("sleep",tok_srch,5) == 0)
 			{
-				tok_srch = strtok(NULL, char_space);
+				tok_srch = strtok(NULL, " ");
 				
-				// if there is a new line, remove it
+				/* if there is a new line, remove it */
 				if(tok_srch[strlen(tok_srch)-1] == '\n') 
 				{
 					tok_srch[strlen(tok_srch)-1] = 0;
@@ -85,54 +72,61 @@ int main(int argc, char **argv)
 				
 				sleep(atoi(tok_srch));
 				
-			} // sleep function
+			} /* sleep function */
 			
-			// write
+			/* write */
 			if(strncmp("write",tok_srch,5) == 0)
 			{
-				// strtok to filename of function
-				tok_srch = strtok(NULL, char_quote);
+				FILE* write_file = NULL;
+
+				/* strtok to filename of function */
+				tok_srch = strtok(NULL, "\"");
 				
-				// Check if file exists and can be opened
-				if(access(tok_srch, F_OK) == -1) 
+				/* open file */
+				write_file = fopen(tok_srch, "w");
+
+				/* Check if file exists and can be opened */
+				if(write_file == NULL) 
 				{
-					printf("Warning: %s does not exist, creating file.\n", tok_srch);
+					printf("Warning: Cannot write to %s.\n", tok_srch);
 				}
 				
-				FILE *write_file = fopen(tok_srch, "w");
 				
-				// Check if file opened
+				/* Check if file opened */
 				if(write_file == NULL) 
 				{
 					printf("Error: failed to write to %s.\n", tok_srch);
 					continue;
 				}
 				
-				// strtok to the content that will be written to file
-				tok_srch = strtok(NULL, char_quote);
-				tok_srch = strtok(NULL, char_quote);
+				/* strtok to the content that will be written to file */
+				tok_srch = strtok(NULL, "\"");
+				tok_srch = strtok(NULL, "\"");
 				
 				fprintf(write_file, "%s\n", tok_srch);
 				
 				fclose(write_file);
 				
-			} // write function
+			} /* write function */
 			
-			// read function
+			/* read function */
 			if(strncmp("read",tok_srch,4) == 0)
 			{
-				// strtok to filename of function
-				tok_srch = strtok(NULL, char_quote);
+				char read_line[1024];
+				FILE *read_file = NULL;
+
+				/* strtok to filename of function */
+				tok_srch = strtok(NULL, "\"");
 				
-				FILE *read_file = fopen(tok_srch, "r");
-				
+				/* open file */
+				read_file = fopen(tok_srch, "r");
+
+				/* Check if file was opened successfully */
 				if(read_file == NULL) 
 				{
 					printf("Error: failed to open %s.\n", tok_srch);
 					continue;
 				}
-				
-				char read_line[1024];
 				
 				while(fgets(read_line, sizeof(read_line), read_file) != NULL) 
 				{
@@ -140,10 +134,10 @@ int main(int argc, char **argv)
 				}
 				
 				fclose(read_file);
-			} // read function
+			} /* read function */
 			
-		} // end of while
-	} // file null
+		} /* end of while */
+	} /* file null */
 		
 	fclose(script);
 	

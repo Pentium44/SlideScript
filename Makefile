@@ -8,7 +8,7 @@ VERSION_EXTRA = \"$(EXTRA)\"
 PREFIX ?= /usr/local
 
 CC           ?= cc
-CFLAGS       += -O2 -std=c99 -pedantic -g -Wall -Wextra --param=ssp-buffer-size=2 -fstack-protector-all
+CFLAGS       += -O2 -ansi -pedantic -g -Wall -Wextra --param=ssp-buffer-size=2 -fstack-protector-all
 CPPFLAGS     += -DVERSION=$(VERSION) -DVERSION_EXTRA=$(VERSION_EXTRA) -D_FORTIFY_SOURCE=2
 LDFLAGS      += -Wl,-O1,--sort-common,--hash-style=gnu,-z,relro
 BIN          ?= slidescript
