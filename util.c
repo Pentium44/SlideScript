@@ -26,7 +26,7 @@ void parse_args(int argc, char** argv)
 	// -v flag given, show version
 	else if(argc == 2 && strncmp("-v", argv[1], 2) == 0) 
 	{
-		printf("SlideScript %s\n", VERSION);
+		printf("SlideScript %s-%s\n", VERSION, VERSION_EXTRA);
 		exit(EXIT_SUCCESS);
 	}
 	
