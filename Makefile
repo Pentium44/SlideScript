@@ -1,20 +1,26 @@
 # SlideScript makefile
 # (C) Copyright 2014 Chris Dorman, some rights reserved (CC-BY-SA 3.0)
-CC=gcc
-FLAGS=-O2 -Wall -Wextra
-EXEC=slidescript
 
+PREFIX ?= /usr/local
+
+CC           ?= cc
+CFLAGS       += -O2 -std=c99 -pedantic -g -Wall -Wextra --param=ssp-buffer-size=2 -fstack-protector-all
+CPPFLAGS     ?= -D_FORTIFY_SOURCE=2
+LDFLAGS      ?= -Wl,-O1,--sort-common,--hash-style=gnu,-z,relro
+BIN          ?= slidescript
+
+OBJECTS = main.o
 
 all: main
 
-main: src
-	$(CC) main.o -o $(EXEC) $(FLAGS)
-	
-src:
-	$(CC) -c main.c $(FLAGS)
+fresh: clean all
 
+main: $(OBJECTS)
+	$(CC) $(OBJECTS) -o $(BIN) $(LDFLAGS) $(CFLAGS)
+	
 clean:
-	rm *o $(EXEC)
+	rm -f $(OBJECTS) $(BIN)
 	
 install:
-	cp $(EXEC) /usr/bin
+	install -D $(BIN) $(DESTDIR)/$(PREFIX)/bin/$(BIN)
+
